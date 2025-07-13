@@ -39,7 +39,7 @@
 
       pnpmDeps = pkgs.pnpm.fetchDeps {
         inherit (self.packages.${system}.default) pname version src;
-        hash = "sha256-rfUXu8cU8/un7OhtLT3YhiPfEZMynBIEiRDZWW0TOAA=";
+        hash = "sha256-MfWRsOzFiVLLVkX6jiHCW7Z44yEtS3uDjdWYf6pbpW8=";
       };
     };
 
