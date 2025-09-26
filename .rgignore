@@ -1,5 +1,4 @@
 @luagir
 build/
 dist/
-src/icons
-src/lib
+scripts/lua

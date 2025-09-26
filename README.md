@@ -1,13 +1,9 @@
-# Gnim template for a Gtk4 Application
+# astal-lua template for a Gtk Application
 
-A simple Todo list application.
+A simple Counter application.
 
 1. give the project a name in
    - `meson.build`
-   - `flake.nix` (or delete this when not using nix)
-2. `pnpm install`
-3. `pnpm run dev`
-
-## TODO
-
-- [ ] add flatpak support
+2. simply run:
+   - `sh scripts/run.sh`  
+    This command will bundle and build the project automatically.

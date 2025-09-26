@@ -58,7 +58,8 @@ custom_target(
     root / 'scripts/lua/bundle.lua',
     '@INPUT@',
     '-o', '@OUTPUT@',
-    '-i', project_paths + ';' + lua_path,
+    # '-i', project_paths + ';' + lua_path, # Use this to include your local installed modules
+    '-i', project_paths,
     '-g', ignore_requires,
     '--minify',
     '--verbose',

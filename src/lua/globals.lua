@@ -1,7 +1,8 @@
 astal = require('astal')
 App = require('astal.gtk4.app')
-Variable = require('astal.variable')
-bind = require('astal.binding')
+Widget = require('astal.gtk4.widget')
+
+Variable, bind = astal.Variable, astal.bind
 async, await = astal.async, astal.await
 
 GLib = astal.require('GLib')
@@ -10,9 +11,7 @@ Gio = astal.require('Gio')
 Adw = astal.require('Adw')
 GObject = astal.require('GObject')
 
-Widget = require('astal.gtk4.widget')
-
-local astalify = require('astal.gtk4.astalify')
+local astalify = Widget.astalify
 
 Widget.ApplicationWindow = astalify(Adw.ApplicationWindow, {
     set_children = function(self, children) self.content = children[1] or Gtk.Box {} end,
