@@ -1,3 +1,5 @@
+#!@lua@
+
 require('lua.globals')
 
 package.domain, package.resource = '@domain@', '@resource@'
@@ -29,5 +31,7 @@ end
 function App:on_activate() self.main_window:present() end
 
 local exit_code = App:run { arg[0], ... }
+
+print(_VERSION)
 
 os.exit(exit_code)

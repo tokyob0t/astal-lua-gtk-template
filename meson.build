@@ -49,6 +49,7 @@ custom_target(
     input: 'src/init.in.lua',
     output: 'init.in.lua',
     configuration: {
+      'lua': lua.full_path(),
       'resource': resource,
       'domain': domain,
     },
@@ -58,8 +59,8 @@ custom_target(
     root / 'scripts/lua/bundle.lua',
     '@INPUT@',
     '-o', '@OUTPUT@',
-    # '-i', project_paths + ';' + lua_path, # Use this to include your local installed modules
-    '-i', project_paths,
+    '-i', project_paths + ';' + lua_path, # Use this to include your local installed modules
+    # '-i', project_paths,
     '-g', ignore_requires,
     '--minify',
     '--verbose',
@@ -73,7 +74,7 @@ custom_target(
 configure_file(
   input: 'data/desktop.in.desktop',
   output: domain + '.desktop',
-  configuration: {'exe': lua.full_path() + ' ' + bindir / name},
+  configuration: {'exe': bindir / name},
   install: true,
   install_dir: datadir / 'applications',
 )
