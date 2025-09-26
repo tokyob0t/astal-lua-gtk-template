@@ -1,41 +1,68 @@
 # FIXME: rename
-project('todo-demo', version: '0.0.0')
-domain = 'me.example.todoDemo'
-resource = '/me/example/todoDemo'
+project('astal-lua-gtk-template', version: '0.0.0')
+domain = 'xyz.example.luaApplication'
+resource = '/xyz/example/luaApplication'
+lua_version = '5.1'
+ignore_requires = 'lgi' # Sets the modules to ignore when bundling, separated by semicolons
 
 name = meson.project_name()
 version = meson.project_version()
 
+root = meson.current_source_dir()
 prefix = get_option('prefix')
 libdir = prefix / get_option('libdir')
 datadir = prefix / get_option('datadir')
 bindir = prefix / get_option('bindir')
 pkgdatadir = datadir / name
 
+lua_dirs = run_command(
+  'find',
+  root / 'src',
+  '-type', 'f',
+  '-name', '*.lua',
+  '-exec', 'dirname',
+  '{}',
+  ';',
+).stdout().strip().split('\n')
+
+project_paths = ''
+
+foreach d : lua_dirs
+  project_paths += d + '/?.lua;' + d + '/?/init.lua;'
+endforeach
+
+lua = find_program('lua' + lua_version)
+luarocks = find_program('luarocks')
+
+luarocks_path = run_command(luarocks, '--lua-version=' + lua_version, 'path').stdout()
+
+lua_path = ''
+
+foreach line : luarocks_path.split('\n')
+  if line.startswith('export LUA_PATH=')
+    lua_path = line.split('=')[1].strip('\'')
+  endif
+endforeach
+
 custom_target(
   input: configure_file(
-    input: 'src/main.ts',
-    output: 'main.ts',
+    input: 'src/init.in.lua',
+    output: 'init.in.lua',
     configuration: {
-      'gjs': find_program('gjs').full_path(),
-      'version': version,
-      'prefix': prefix,
-      'libdir': libdir,
+      'resource': resource,
+      'domain': domain,
     },
   ),
   command: [
-    find_program('esbuild'),
-    '--bundle', '@INPUT@',
-    '--outfile=@OUTPUT@',
-    '--external:gi://*',
-    '--external:resource://*',
-    '--external:system',
-    '--format=esm',
-    '--sourcemap=inline',
-    '--target=firefox116',
-    '--define:import.meta.domain="' + domain + '"',
-    '--define:import.meta.resource="' + resource + '"',
-    '--define:import.meta.name="' + name + '"',
+    lua,
+    root / 'scripts/lua/bundle.lua',
+    '@INPUT@',
+    '-o', '@OUTPUT@',
+    '-i', project_paths + ';' + lua_path,
+    '-g', ignore_requires,
+    '--minify',
+    '--verbose',
+    '--no-animals',
   ],
   output: name,
   install: true,
@@ -45,7 +72,7 @@ custom_target(
 configure_file(
   input: 'data/desktop.in.desktop',
   output: domain + '.desktop',
-  configuration: {'exe': bindir / name},
+  configuration: {'exe': lua.full_path() + ' ' + bindir / name},
   install: true,
   install_dir: datadir / 'applications',
 )

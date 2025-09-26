@@ -1,6 +1,6 @@
 [Desktop Entry]
-Name=Todo Demo
-Comment=Gnim Demo Application
+Name=Counter
+Comment=A simple GTK counter application
 Type=Application
 Exec=@exe@
 Terminal=false
