@@ -1,22 +1,36 @@
 {
-    "$schema": "https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json",
-    "diagnostics": {
-        "disableScheme": ["@luagir/", "build", "dist"],
-        "disable": ["param-type-mismatch"]
-    },
+    "$schema": "https://raw.githubusercontent.com/EmmyLuaLs/emmylua-analyzer-rust/refs/heads/main/crates/emmylua_code_analysis/resources/schema.json",
     "completion": {
-        "callSnippet": "Both",
-        "keywordSnippet": "Both"
+        "autoRequire": true,
+        "callSnippet": false,
+        "postfix": "@"
+    },
+    "diagnostics": {
+        "globals": [],
+        "disable": [
+            "call-non-callable",
+            "duplicate-index",
+            "inject-field",
+            "duplicate-set-field"
+        ]
     },
     "workspace": {
-        "library": ["@luagir/", "/usr/share/lua/5.1/", "venv/share/lua/5.1/"],
-        "maxPreload": 2000,
-        "preloadFileSize": 1000,
-        "ignoreDir": ["@luagir/", "build", "dist"]
+        "library": [
+            "venv/share/lua/5.1",
+            "@luagir",
+            "{luarocks}"
+        ],
+        "workspaceRoots": [
+            "./src"
+        ]
     },
     "runtime": {
         "version": "LuaJIT",
-        "path": ["./src/?.lua", "./src/?/init.lua"],
-        "pathStrict": true
+        "requirePattern": [
+            "src/?.lua",
+            "src/?/init.lua",
+            "venv/share/lua/5.1/?.lua",
+            "venv/share/lua/5.1/?/init.lua"
+        ]
     }
 }
